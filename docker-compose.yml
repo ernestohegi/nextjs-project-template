@@ -1,0 +1,27 @@
+services:
+  myproject:
+    image: myuser/myproject:${IMAGE_TAG}
+    restart: unless-stopped
+
+    labels:
+      - traefik.enable=true
+
+      # HTTP router for redirecting to HTTPS
+      - traefik.http.routers.myproject-http.rule=Host(`myproject.com`) || Host( `www.myproject.com`)
+      - traefik.http.routers.myproject-http.entrypoints=web
+      - traefik.http.routers.myproject-http.middlewares=redirect-to-https
+      - traefik.http.routers.myproject-http.priority=1
+
+      # HTTPS router serving your app
+      - traefik.http.routers.myproject.rule=Host(`myproject.com`) || Host(`www.myproject.com`)
+      - traefik.http.routers.myproject.entrypoints=websecure
+      - traefik.http.routers.myproject.tls=true
+      - traefik.http.routers.myproject.tls.certresolver=myresolver
+      - traefik.http.services.myproject.loadbalancer.server.port=3000
+
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
