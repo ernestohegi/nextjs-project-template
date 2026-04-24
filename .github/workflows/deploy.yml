@@ -5,13 +5,14 @@ on:
     branches:
       - main
     paths:
-      - "app/**"
-      - "public/**"
-      - "Dockerfile"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "next.config.ts"
-      - ".github/**"
+      - 'app/**'
+      - 'public/**'
+      - 'Dockerfile'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'next.config.ts'
+      - '.github/**'
+      - 'docker-compose.yml'
 
 concurrency:
   group: docker-build-${{ github.ref }}
@@ -67,7 +68,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "./docker-compose.yml"
+          source: './docker-compose.yml'
           target: ${{ secrets.DEPLOY_PATH }}
 
       - name: Pull image and run it
